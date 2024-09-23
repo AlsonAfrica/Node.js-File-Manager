@@ -8,10 +8,5 @@
     "id": "1",
     "name": "banana",
     "quantity": "2"
-  },
-  {
-    "id": 2,
-    "item": "apple",
-    "quantity": "2"
   }
 ]

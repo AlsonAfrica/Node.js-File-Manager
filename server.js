@@ -31,7 +31,13 @@ fs.mkdir('shoppingListDirectory', { recursive: true }, (error) => {
                             res.writeHead(500);
                             return res.end(JSON.stringify({ error: 'Error reading shopping list' }));
                         }
-                        const shoppingList = JSON.parse(data);
+                        let shoppingList;
+                        try {
+                            shoppingList = JSON.parse(data);
+                        } catch (parseError) {
+                            res.writeHead(500);
+                            return res.end(JSON.stringify({ error: 'Error parsing shopping list data' }));
+                        }
 
                         // If an item ID is specified in the URL, return that item
                         if (itemId) {
@@ -45,7 +51,7 @@ fs.mkdir('shoppingListDirectory', { recursive: true }, (error) => {
                             }
                         }
                         res.writeHead(200);
-                        res.end(data); // Return all items
+                        return res.end(JSON.stringify(shoppingList)); // Return all items
                     });
 
                 // POST - Add new item to the shopping list
@@ -55,16 +61,28 @@ fs.mkdir('shoppingListDirectory', { recursive: true }, (error) => {
                         body += chunk.toString();
                     });
                     req.on('end', () => {
-                        const newItem = JSON.parse(body);
+                        let newItem;
+                        try {
+                            newItem = JSON.parse(body);
+                        } catch (parseError) {
+                            res.writeHead(400);
+                            return res.end(JSON.stringify({ error: 'Invalid JSON in request body' }));
+                        }
                         fs.readFile(filePath, 'utf8', (err, data) => {
                             if (err) {
                                 res.writeHead(500);
                                 return res.end(JSON.stringify({ error: 'Error reading shopping list' }));
                             }
-                            const shoppingList = JSON.parse(data);
+                            let shoppingList;
+                            try {
+                                shoppingList = JSON.parse(data);
+                            } catch (parseError) {
+                                res.writeHead(500);
+                                return res.end(JSON.stringify({ error: 'Error parsing shopping list data' }));
+                            }
 
                             // Assign an ID to the new item (incremented by 1)
-                            newItem.id = shoppingList.length ? shoppingList[shoppingList.length - 1].id + 1 : 1;
+                            newItem.id = shoppingList.length ? Math.max(...shoppingList.map(item => item.id)) + 1 : 1;
                             shoppingList.push(newItem);
 
                             fs.writeFile(filePath, JSON.stringify(shoppingList, null, 2), 'utf8', (writeErr) => {
@@ -73,7 +91,7 @@ fs.mkdir('shoppingListDirectory', { recursive: true }, (error) => {
                                     return res.end(JSON.stringify({ error: 'Error updating shopping list' }));
                                 }
                                 res.writeHead(201);
-                                res.end(JSON.stringify(newItem));
+                                return res.end(JSON.stringify(newItem));
                             });
                         });
                     });
@@ -85,28 +103,40 @@ fs.mkdir('shoppingListDirectory', { recursive: true }, (error) => {
                         body += chunk.toString();
                     });
                     req.on('end', () => {
-                        const updateData = JSON.parse(body);
+                        let updateData;
+                        try {
+                            updateData = JSON.parse(body);
+                        } catch (parseError) {
+                            res.writeHead(400);
+                            return res.end(JSON.stringify({ error: 'Invalid JSON in request body' }));
+                        }
                         fs.readFile(filePath, 'utf8', (err, data) => {
                             if (err) {
                                 res.writeHead(500);
                                 return res.end(JSON.stringify({ error: 'Error reading shopping list' }));
                             }
-                            const shoppingList = JSON.parse(data);
+                            let shoppingList;
+                            try {
+                                shoppingList = JSON.parse(data);
+                            } catch (parseError) {
+                                res.writeHead(500);
+                                return res.end(JSON.stringify({ error: 'Error parsing shopping list data' }));
+                            }
                             const index = shoppingList.findIndex(item => item.id === itemId);
                             if (index !== -1) {
                                 // Update the existing item with new data
-                                shoppingList[index] = { ...shoppingList[index], ...updateData };
+                                shoppingList[index] = { ...shoppingList[index], ...updateData, id: itemId };
                                 fs.writeFile(filePath, JSON.stringify(shoppingList, null, 2), 'utf8', (writeErr) => {
                                     if (writeErr) {
                                         res.writeHead(500);
                                         return res.end(JSON.stringify({ error: 'Error updating shopping list' }));
                                     }
                                     res.writeHead(200);
-                                    res.end(JSON.stringify(shoppingList[index]));
+                                    return res.end(JSON.stringify(shoppingList[index]));
                                 });
                             } else {
                                 res.writeHead(404);
-                                res.end(JSON.stringify({ error: 'Item not found' }));
+                                return res.end(JSON.stringify({ error: 'Item not found' }));
                             }
                         });
                     });
@@ -118,7 +148,13 @@ fs.mkdir('shoppingListDirectory', { recursive: true }, (error) => {
                             res.writeHead(500);
                             return res.end(JSON.stringify({ error: 'Error reading shopping list' }));
                         }
-                        let shoppingList = JSON.parse(data);
+                        let shoppingList;
+                        try {
+                            shoppingList = JSON.parse(data);
+                        } catch (parseError) {
+                            res.writeHead(500);
+                            return res.end(JSON.stringify({ error: 'Error parsing shopping list data' }));
+                        }
                         const updatedList = shoppingList.filter(item => item.id !== itemId);
 
                         // If the item is not found, return 404
@@ -133,26 +169,24 @@ fs.mkdir('shoppingListDirectory', { recursive: true }, (error) => {
                                 return res.end(JSON.stringify({ error: 'Error updating shopping list' }));
                             }
                             res.writeHead(204); // No content, indicating success
-                            res.end();
+                            return res.end();
                         });
                     });
 
                 } else {
                     res.writeHead(405); // Method not allowed
-                    res.end(JSON.stringify({ error: 'Method Not Allowed' }));
+                    return res.end(JSON.stringify({ error: 'Method Not Allowed' }));
                 }
 
             } else {
                 res.writeHead(404);
-                res.end(JSON.stringify({ error: 'Endpoint Not Found' }));
+                return res.end(JSON.stringify({ error: 'Endpoint Not Found' }));
             }
         });
 
-        const PORT = 3000;
+        const PORT = 5002;
         server.listen(PORT, () => {
             console.log(`Server is running at http://localhost:${PORT}`);
         });
     });
 });
-
-
