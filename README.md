@@ -44,6 +44,7 @@ The server will start on `http://localhost:5002` by default.
 
 ### GET /api/items
 Returns all shopping list items.
+Postman:  http://localhost:5002/shopping-list
 
 Response:
 ```json
@@ -59,7 +60,7 @@ Response:
 
 ### GET /api/items/:id
 Returns a specific item by ID.
-
+Postman: http://localhost:5002/shopping-list/1
 Response:
 ```json
 {
@@ -72,6 +73,7 @@ Response:
 
 ### POST /api/items
 Creates a new shopping list item.
+Postman: http://localhost:5002/shopping-list
 
 Request body:
 ```json
@@ -84,6 +86,7 @@ Request body:
 
 ### PUT /api/items/:id
 Updates an existing item.
+Postman: /shopping-list/:id
 
 Request body:
 ```json
@@ -96,6 +99,7 @@ Request body:
 
 ### DELETE /api/items/:id
 Deletes an item from the shopping list.
+Postman: http://localhost:5002/shopping-list/1
 
 ## Error Handling
 
@@ -130,13 +134,6 @@ npm install --save-dev nodemon
 2. Run in development mode:
 ```bash
 npm run dev
-```
-
-## Testing
-
-Run the test suite:
-```bash
-npm test
 ```
 
 ## Contributing
