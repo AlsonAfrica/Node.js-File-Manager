@@ -86,7 +86,7 @@ Request body:
 
 ### PUT /api/items/:id
 Updates an existing item.
-Postman: /shopping-list/:id
+Postman: http://localhost:5002/shopping-list/1
 
 Request body:
 ```json
