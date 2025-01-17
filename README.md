@@ -16,6 +16,10 @@ A RESTful API for managing shopping lists built with Node.js and Express. This A
 - Node.js (v14 or higher)
 - npm (Node Package Manager)
 
+## Technologies
+- Node
+- Javascript
+
 ## Installation
 
 1. Clone the repository:
