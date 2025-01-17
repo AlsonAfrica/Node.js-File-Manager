@@ -21,7 +21,7 @@ A RESTful API for managing shopping lists built with Node.js and Express. This A
 1. Clone the repository:
 ```bash
 git clone https://github.com/AlsonAfrica/Node.js-File-Manager.git
-cd 
+cd Node.js-File-Manager
 ```
 
 2. Install dependencies:
@@ -31,10 +31,10 @@ npm install
 
 3. Start the server:
 ```bash
-npm start
+nodemon server.js or node server.js
 ```
 
-The server will start on `http://localhost:3000` by default.
+The server will start on `http://localhost:5002` by default.
 
 ## API Endpoints
 
