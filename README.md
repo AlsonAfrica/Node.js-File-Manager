@@ -117,10 +117,7 @@ Items are stored in a JSON file with the following structure:
 {
   "id": "string",
   "name": "string",
-  "quantity": "number",
-  "completed": "boolean",
-  "createdAt": "string",
-  "updatedAt": "string"
+  "quantity": "number"
 }
 ```
 
