@@ -20,8 +20,8 @@ A RESTful API for managing shopping lists built with Node.js and Express. This A
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/shopping-list-api.git
-cd shopping-list-api
+git clone https://github.com/AlsonAfrica/Node.js-File-Manager.git
+cd 
 ```
 
 2. Install dependencies:
